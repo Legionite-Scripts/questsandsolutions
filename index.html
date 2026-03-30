@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quests & Solutions Advisory Limited</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230D1117'/%3E%3Cpath d='M16 2L30 9.5V22.5L16 30L2 22.5V9.5Z' stroke='%23B8952A' stroke-width='1.5' fill='none'/%3E%3Cpath d='M16 6L26.5 11.75V23.25L16 29L5.5 23.25V11.75Z' stroke='%23B8952A' stroke-width='0.5' fill='none' opacity='0.35'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23B8952A' opacity='0.85'/%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230D1117'/%3E%3Cpath d='M16 2L30 9.5V22.5L16 30L2 22.5V9.5Z' stroke='%23B8952A' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23B8952A' opacity='0.85'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#0D1117" />
+  <meta name="description" content="Independent advisory firm delivering capital, strategy, and cross-border intelligence to enterprises and multinationals." />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Typography: Playfair Display (display) + DM Sans (body) + JetBrains Mono (accent) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            body:    ['"DM Sans"', 'system-ui', 'sans-serif'],
+            mono:    ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            /* Primary — a deep Prussian blue-black */
+            ink:     { DEFAULT: '#0D1117', 50: '#f0f2f5', 100: '#d9dde6', 200: '#b0b8c9', 300: '#7e8da8', 400: '#556484', 500: '#3a4f6e', 600: '#2b3d5a', 700: '#1e2e46', 800: '#141f30', 900: '#0D1117' },
+            /* Accent 1 — antique gold */
+            gold:    { DEFAULT: '#B8952A', light: '#D4AF50', dim: '#7a6420', pale: '#f5edcf' },
+            /* Accent 2 — warm off-white (parchment) */
+            parchment: { DEFAULT: '#F0EAD6', dark: '#d4cbb5' },
+            /* Neutral cool */
+            slate:   { 850: '#1c2535', 950: '#0a0f1a' },
+          },
+          letterSpacing: {
+            widest2: '0.25em',
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    /* ─── BASE RESETS ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-family: 'DM Sans', system-ui, sans-serif; }
+
+    /* ─── NOISE GRAIN OVERLAY ─────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    /* ─── TYPOGRAPHY ──────────────────────────────────────── */
+    .font-display  { font-family: 'Playfair Display', Georgia, serif; }
+    .font-body     { font-family: 'DM Sans', system-ui, sans-serif; }
+    .font-mono     { font-family: 'JetBrains Mono', monospace; }
+
+    /* ─── CUSTOM SCROLLBAR ────────────────────────────────── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: #0D1117; }
+    ::-webkit-scrollbar-thumb { background: #B8952A; border-radius: 2px; }
+
+    /* ─── NAV GLASS ───────────────────────────────────────── */
+    .nav-glass {
+      background: rgba(13,17,23,0.82);
+      backdrop-filter: blur(18px) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) saturate(1.3);
+      border-bottom: 1px solid rgba(184,149,42,0.12);
+    }
+    .nav-glass.scrolled {
+      background: rgba(13,17,23,0.97);
+      border-bottom-color: rgba(184,149,42,0.22);
+    }
+
+    /* ─── RULED LINES (decorative) ────────────────────────── */
+    .rule-gold {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #B8952A 40%, #D4AF50 60%, transparent);
+    }
+    .rule-dim {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(184,149,42,0.2) 50%, transparent);
+    }
+
+    /* ─── SECTION EYEBROW ─────────────────────────────────── */
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #B8952A;
+    }
+    .eyebrow-line::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1px;
+      background: #B8952A;
+      vertical-align: middle;
+      margin-right: 12px;
+      position: relative; top: -1px;
+    }
+
+    /* ─── HERO GRID PATTERN ───────────────────────────────── */
+    .hero-grid {
+      background-image:
+        linear-gradient(rgba(184,149,42,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184,149,42,0.04) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    /* ─── HERO RADIAL ─────────────────────────────────────── */
+    .hero-radial {
+      background: radial-gradient(ellipse 60% 70% at 70% 40%, rgba(184,149,42,0.07) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 50% at 20% 80%, rgba(61,97,145,0.06) 0%, transparent 60%);
+    }
+
+    /* ─── ANIMATED COUNTER ────────────────────────────────── */
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1;
+      color: #F0EAD6;
+    }
+
+    /* ─── CARD HOVER ──────────────────────────────────────── */
+    .card-hover {
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      border-color: rgba(184,149,42,0.45) !important;
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.45), 0 0 0 1px rgba(184,149,42,0.1);
+    }
+
+    /* ─── PILL BADGE ──────────────────────────────────────── */
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 14px;
+      border: 1px solid rgba(184,149,42,0.35);
+      border-radius: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #B8952A;
+    }
+    .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: #B8952A; animation: pulse-dot 2s ease infinite; }
+
+    /* ─── SCROLL REVEAL ───────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ─── MARQUEE ─────────────────────────────────────────── */
+    .marquee-track { display: flex; gap: 0; animation: marquee 35s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ─── GLOW BUTTON ─────────────────────────────────────── */
+    .btn-gold {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px;
+      background: #B8952A;
+      color: #0D1117;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid #B8952A;
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+    .btn-gold::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .btn-gold:hover { background: transparent; color: #D4AF50; box-shadow: inset 0 0 0 1px #D4AF50; }
+    .btn-gold:hover::before { opacity: 1; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px;
+      background: transparent;
+      color: #F0EAD6;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid rgba(240,234,214,0.2);
+      transition: all 0.25s ease;
+    }
+    .btn-ghost:hover { border-color: #B8952A; color: #D4AF50; }
+
+    /* ─── FORM CONTROLS ───────────────────────────────────── */
+    .field {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.09);
+      color: #F0EAD6;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      padding: 13px 16px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .field::placeholder { color: rgba(240,234,214,0.3); }
+    .field:focus { border-color: rgba(184,149,42,0.6); background: rgba(184,149,42,0.04); }
+    .field option { background: #141f30; }
+
+    select.field {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B8952A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    /* ─── QR ZONE ─────────────────────────────────────────── */
+    .qr-zone {
+      border: 1px solid rgba(184,149,42,0.25);
+      background: rgba(184,149,42,0.03);
+      position: relative;
+    }
+    .qr-zone::before, .qr-zone::after {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+    }
+    .qr-zone::before { top: -1px; left: -1px; border-top: 2px solid #B8952A; border-left: 2px solid #B8952A; }
+    .qr-zone::after  { bottom: -1px; right: -1px; border-bottom: 2px solid #B8952A; border-right: 2px solid #B8952A; }
+    .qr-inner {
+      width: 100px; height: 100px;
+      border: 1px dashed rgba(184,149,42,0.3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .qr-inner::before {
+      content: '';
+      position: absolute; inset: 8px;
+      background:
+        repeating-linear-gradient(0deg, rgba(184,149,42,0.15) 0, rgba(184,149,42,0.15) 2px, transparent 2px, transparent 7px),
+        repeating-linear-gradient(90deg, rgba(184,149,42,0.15) 0, rgba(184,149,42,0.15) 2px, transparent 2px, transparent 7px);
+    }
+
+    /* ─── PARTNER CARD (ARM-style scalable grid) ──────────── */
+    /* NOTE FOR FUTURE: .partner-card → .companies-card when 'Our Companies' expands */
+    .partner-card {
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.02);
+      transition: all 0.3s ease;
+    }
+    .partner-card:hover {
+      border-color: rgba(184,149,42,0.35);
+      background: rgba(184,149,42,0.04);
+    }
+    .partner-card:hover .partner-arrow { transform: translateX(4px); color: #B8952A; }
+    .partner-arrow { transition: transform 0.25s, color 0.25s; }
+
+    /* ─── RESOURCE CARD ───────────────────────────────────── */
+    .resource-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+    }
+
+    /* ─── DIAGONAL DIVIDER ────────────────────────────────── */
+    .diagonal-clip {
+      clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+    }
+
+    /* ─── LIVE CHAT ───────────────────────────────────────── */
+    .chat-widget {
+      position: fixed; bottom: 28px; right: 28px; z-index: 999;
+    }
+    .chat-btn {
+      width: 54px; height: 54px;
+      background: #B8952A;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 24px rgba(184,149,42,0.35);
+      transition: all 0.25s;
+      position: relative;
+    }
+    .chat-btn:hover { background: #D4AF50; transform: scale(1.06); }
+    .chat-status {
+      position: absolute; top: -2px; right: -2px;
+      width: 11px; height: 11px;
+      background: #22c55e; border-radius: 50%;
+      border: 2px solid #0D1117;
+    }
+    .chat-status::before {
+      content: ''; position: absolute; inset: -3px;
+      border-radius: 50%; background: #22c55e;
+      opacity: 0.4; animation: pulse-ring 2s ease infinite;
+    }
+    .chat-panel {
+      position: absolute; bottom: 66px; right: 0;
+      width: 330px;
+      background: #141f30;
+      border: 1px solid rgba(184,149,42,0.2);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+      display: none; flex-direction: column;
+    }
+    .chat-panel.open { display: flex; }
+    .chat-messages { max-height: 240px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .chat-messages::-webkit-scrollbar { width: 2px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #B8952A; }
+    .msg-firm, .msg-user {
+      max-width: 80%; padding: 10px 14px;
+      font-size: 0.8rem; line-height: 1.5; font-family: 'DM Sans', sans-serif;
+    }
+    .msg-firm { background: rgba(184,149,42,0.1); border: 1px solid rgba(184,149,42,0.18); color: #F0EAD6; align-self: flex-start; }
+    .msg-user { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); color: #F0EAD6; align-self: flex-end; }
+
+    /* ─── MOBILE MENU ─────────────────────────────────────── */
+    .mobile-nav {
+      position: fixed; inset: 0; z-index: 990;
+      background: #0D1117;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+      display: flex; flex-direction: column;
+      padding: 100px 48px 60px;
+    }
+    .mobile-nav.open { transform: translateX(0); }
+
+    /* ─── ANIMATIONS ──────────────────────────────────────── */
+    @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
+    @keyframes pulse-ring { 0% { transform:scale(1); opacity:0.4; } 100% { transform:scale(2.4); opacity:0; } }
+    @keyframes fade-up { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+    @keyframes line-grow { from { width:0; } to { width:100%; } }
+
+    .anim-fade-up { animation: fade-up 0.8s cubic-bezier(0.22,1,0.36,1) both; }
+    .delay-100  { animation-delay: 0.10s; }
+    .delay-200  { animation-delay: 0.20s; }
+    .delay-300  { animation-delay: 0.30s; }
+    .delay-400  { animation-delay: 0.40s; }
+    .delay-500  { animation-delay: 0.50s; }
+
+    /* ─── TOAST ───────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(64px);
+      background: #141f30; border: 1px solid #B8952A;
+      padding: 14px 28px; color: #F0EAD6;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      z-index: 10000; display: flex; align-items: center; gap: 12px;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+      pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ─── COMPANY SECTION: Future-proofed ────────────────────
+       Current label: Partners / Clientele
+       Future label:  Our Companies
+       To upgrade: change .section-companies heading text only.
+       Card grid already supports 2-6 columns via Tailwind responsive
+    ─────────────────────────────────────────────────────────── */
+
+    /* ─── RESPONSIVE HELPERS ──────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-stat-row { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body class="bg-ink-900 text-parchment font-body antialiased overflow-x-hidden">
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════════════ -->
+<header id="navbar" class="nav-glass fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 h-[70px] flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3 group">
+      <div class="w-9 h-9 border border-gold/40 flex items-center justify-center group-hover:border-gold/80 transition-colors duration-300">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 1L17 5.5V12.5L9 17L1 12.5V5.5L9 1Z" stroke="#B8952A" stroke-width="1" fill="none"/>
+          <circle cx="9" cy="9" r="2.5" fill="#B8952A" opacity="0.7"/>
+        </svg>
+      </div>
+      <div>
+        <div class="font-display text-[13px] font-medium text-parchment tracking-wide leading-tight">Quests &amp; Solutions</div>
+        <div class="font-mono text-[9px] text-gold/70 tracking-[0.18em] uppercase">Advisory Limited</div>
+      </div>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden lg:flex items-center gap-8">
+      <a href="#about"     class="font-body text-[12px] font-medium text-parchment/60 hover:text-gold tracking-widest uppercase transition-colors duration-200">About</a>
+      <a href="#services"  class="font-body text-[12px] font-medium text-parchment/60 hover:text-gold tracking-widest uppercase transition-colors duration-200">Services</a>
+      <a href="#partners"  class="font-body text-[12px] font-medium text-parchment/60 hover:text-gold tracking-widest uppercase transition-colors duration-200">Partners</a>
+      <a href="#resources" class="font-body text-[12px] font-medium text-parchment/60 hover:text-gold tracking-widest uppercase transition-colors duration-200">Resources</a>
+      <a href="#contact"   class="btn-gold text-[11px] py-3 px-7">Get in Touch →</a>
+    </nav>
+
+    <!-- Mobile toggle -->
+    <button id="menuToggle" class="lg:hidden flex flex-col gap-[5px] p-2" aria-label="Menu">
+      <span id="bar1" class="block w-6 h-[1.5px] bg-parchment/80 transition-all duration-300 origin-center"></span>
+      <span id="bar2" class="block w-6 h-[1.5px] bg-parchment/80 transition-all duration-300"></span>
+      <span id="bar3" class="block w-6 h-[1.5px] bg-parchment/80 transition-all duration-300 origin-center"></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Nav Panel -->
+<div id="mobileNav" class="mobile-nav">
+  <!-- Close button -->
+  <button onclick="closeMobileNav()" aria-label="Close menu" style="position:absolute; top:24px; right:24px; background:none; border:1px solid rgba(184,149,42,0.3); width:44px; height:44px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color 0.2s, color 0.2s; color:rgba(240,234,214,0.5);" onmouseover="this.style.borderColor='#B8952A';this.style.color='#B8952A'" onmouseout="this.style.borderColor='rgba(184,149,42,0.3)';this.style.color='rgba(240,234,214,0.5)'">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <a href="#about"     onclick="closeMobileNav()" class="font-display text-3xl text-parchment/80 hover:text-gold border-b border-white/5 pb-6 transition-colors">About</a>
+  <a href="#services"  onclick="closeMobileNav()" class="font-display text-3xl text-parchment/80 hover:text-gold border-b border-white/5 py-6 transition-colors">Services</a>
+  <a href="#partners"  onclick="closeMobileNav()" class="font-display text-3xl text-parchment/80 hover:text-gold border-b border-white/5 py-6 transition-colors">Partners</a>
+  <a href="#resources" onclick="closeMobileNav()" class="font-display text-3xl text-parchment/80 hover:text-gold border-b border-white/5 py-6 transition-colors">Resources</a>
+  <a href="#contact"   onclick="closeMobileNav()" class="font-display text-3xl text-parchment/80 hover:text-gold py-6 transition-colors">Contact</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════ -->
+<section class="hero-grid hero-radial min-h-screen flex flex-col justify-center relative overflow-hidden pt-[70px]">
+
+  <!-- Vertical label left -->
+  <div class="hidden xl:flex absolute left-8 top-1/2 -translate-y-1/2 items-center gap-3" style="writing-mode:vertical-rl; transform: rotate(180deg) translateY(50%);">
+    <span class="font-mono text-[9px] text-gold/40 tracking-[0.22em] uppercase">Est. Nigeria · 2024</span>
+    <span class="block w-24 h-px bg-gold/20"></span>
+  </div>
+
+  <!-- Scroll cue right -->
+  <div class="hidden xl:flex absolute right-8 bottom-16 flex-col items-center gap-3">
+    <span class="font-mono text-[9px] text-parchment/25 tracking-[0.22em] uppercase" style="writing-mode:vertical-rl">Scroll</span>
+    <span class="block w-px h-16 bg-gradient-to-b from-gold/30 to-transparent animate-pulse"></span>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full py-24 lg:py-32">
+    <div class="max-w-4xl">
+
+      <!-- Eyebrow -->
+      <div class="anim-fade-up flex items-center gap-4 mb-8">
+        <div class="pill"><span class="pill-dot"></span>Independent Advisory</div>
+        <span class="hidden sm:block font-mono text-[10px] text-parchment/25 tracking-[0.2em]">QSAL · NG</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="anim-fade-up delay-100 font-display text-5xl sm:text-6xl lg:text-7xl xl:text-[88px] leading-[1.04] font-400 text-parchment mb-8">
+        Navigating Capital.<br/>
+        <em class="text-gold/90 not-italic">Unlocking Value.</em>
+      </h1>
+
+      <!-- Sub -->
+      <p class="anim-fade-up delay-200 font-body text-parchment/55 text-lg lg:text-xl leading-relaxed max-w-2xl mb-12 font-300">
+        Quests &amp; Solutions Advisory Limited is a privately-held advisory firm delivering independent counsel on equity structuring, capital markets access, business valuation, and cross-border transactions — to enterprises, multinationals, and founders who demand precision.
+      </p>
+
+      <!-- CTA Row -->
+      <div class="anim-fade-up delay-300 flex flex-wrap gap-4 mb-16">
+        <a href="#contact" class="btn-gold">Begin a Conversation →</a>
+        <a href="#services" class="btn-ghost">Our Capabilities</a>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="anim-fade-up delay-400 rule-dim mb-12"></div>
+      <div class="hero-stat-row anim-fade-up delay-500 flex items-start gap-10 lg:gap-16 flex-wrap">
+        <div>
+          <div class="stat-num">20<span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
+          <div class="font-mono text-[10px] text-parchment/35 tracking-[0.16em] uppercase mt-2">Years Combined<br/>Leadership</div>
+        </div>
+        <div class="w-px h-12 bg-white/8 self-start mt-2"></div>
+        <div>
+          <div class="stat-num">$<span id="c2">200</span>M<span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
+          <div class="font-mono text-[10px] text-parchment/35 tracking-[0.16em] uppercase mt-2">Advisory &amp;<br/>Capital Value</div>
+        </div>
+        <div class="w-px h-12 bg-white/8 self-start mt-2"></div>
+        <div>
+          <div class="stat-num"><span id="c3">14</span><span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
+          <div class="font-mono text-[10px] text-parchment/35 tracking-[0.16em] uppercase mt-2">International<br/>Markets</div>
+        </div>
+        <div class="w-px h-12 bg-white/8 self-start mt-2"></div>
+        <div>
+          <div class="stat-num"><span id="c4">60</span><span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
+          <div class="font-mono text-[10px] text-parchment/35 tracking-[0.16em] uppercase mt-2">Mandates<br/>Delivered</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     MARQUEE STRIP
+═══════════════════════════════════════════════════════════ -->
+<div class="bg-gold py-3 overflow-hidden select-none" aria-hidden="true">
+  <div class="marquee-track whitespace-nowrap">
+    <!-- First set -->
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Equity Investment</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Business Advisory</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Corporate Valuation</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Capital Markets</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Financing Options</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Delaware Incorporations</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Cross-Border Transactions</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">International Advisory</span><span class="text-ink/40 px-2">◆</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Equity Investment</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Business Advisory</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Corporate Valuation</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Capital Markets</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Financing Options</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Delaware Incorporations</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">Cross-Border Transactions</span><span class="text-ink/40 px-2">◆</span>
+    <span class="font-mono text-ink text-[11px] tracking-[0.22em] uppercase px-8">International Advisory</span><span class="text-ink/40 px-2">◆</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════════════════════ -->
+<section id="about" class="bg-ink-900 py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+      <!-- Left: text -->
+      <div class="reveal">
+        <p class="eyebrow eyebrow-line mb-6">About the Firm</p>
+        <h2 class="font-display text-4xl lg:text-5xl xl:text-[52px] leading-[1.1] font-400 text-parchment mb-8">
+          Counsel Built on<br/><em class="text-gold/90">Conviction &amp; Craft</em>
+        </h2>
+        <div class="space-y-5 font-body text-parchment/55 text-[15px] leading-relaxed font-300">
+          <p>
+            Founded with a singular mandate — to deliver advisory of institutional quality to a curated circle of clients — Quests &amp; Solutions Advisory Limited operates at the intersection of capital intelligence and strategic execution.
+          </p>
+          <p>
+            We are not a deposit-taking institution. We hold no banking licence and seek none. Our independence is our most valuable asset: we advise without conflict, act without agenda, and speak with the candour that only a privately-held firm can afford.
+          </p>
+          <p>
+            Our principal relationships span founders building globally, family offices navigating succession, and multinationals seeking grounded intelligence on the Nigerian and broader African operating environment.
+          </p>
+        </div>
+        <div class="mt-10 rule-dim"></div>
+        <div class="mt-8 grid grid-cols-2 gap-6">
+          <div>
+            <div class="font-mono text-[9px] text-gold/60 tracking-[0.22em] uppercase mb-2">Independence</div>
+            <div class="font-body text-parchment/50 text-[13px]">No deposit licence. No conflicts. Pure advisory mandate.</div>
+          </div>
+          <div>
+            <div class="font-mono text-[9px] text-gold/60 tracking-[0.22em] uppercase mb-2">Discretion</div>
+            <div class="font-body text-parchment/50 text-[13px]">Client engagements are never disclosed without consent.</div>
+          </div>
+          <div>
+            <div class="font-mono text-[9px] text-gold/60 tracking-[0.22em] uppercase mb-2">Global Reach</div>
+            <div class="font-body text-parchment/50 text-[13px]">Access to US, UK, and African capital market networks.</div>
+          </div>
+          <div>
+            <div class="font-mono text-[9px] text-gold/60 tracking-[0.22em] uppercase mb-2">Selectivity</div>
+            <div class="font-body text-parchment/50 text-[13px]">We take on mandates we can serve with excellence, not volume.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: decorative panel -->
+      <div class="reveal" style="transition-delay:0.15s">
+        <div class="relative">
+          <!-- Main panel -->
+          <div class="border border-white/8 bg-white/[0.02] p-8 relative">
+            <div class="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-gold/50"></div>
+            <div class="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-gold/50"></div>
+
+            <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-6">Advisory Focus Distribution</div>
+
+            <!-- Bar chart -->
+            <div class="space-y-5" id="barChart">
+              <div class="bar-row">
+                <div class="flex justify-between mb-2">
+                  <span class="font-body text-[12px] text-parchment/60">Equity &amp; Capital Raising</span>
+                  <span class="font-mono text-[11px] text-gold">92%</span>
+                </div>
+                <div class="h-[2px] bg-white/6 relative overflow-hidden">
+                  <div class="bar-fill h-full bg-gradient-to-r from-gold to-gold-light" data-pct="92" style="width:0; transition:width 1.4s cubic-bezier(0.22,1,0.36,1)"></div>
+                </div>
+              </div>
+              <div class="bar-row">
+                <div class="flex justify-between mb-2">
+                  <span class="font-body text-[12px] text-parchment/60">Strategic Advisory</span>
+                  <span class="font-mono text-[11px] text-gold">85%</span>
+                </div>
+                <div class="h-[2px] bg-white/6 relative overflow-hidden">
+                  <div class="bar-fill h-full bg-gradient-to-r from-gold to-gold-light" data-pct="85" style="width:0; transition:width 1.4s 0.15s cubic-bezier(0.22,1,0.36,1)"></div>
+                </div>
+              </div>
+              <div class="bar-row">
+                <div class="flex justify-between mb-2">
+                  <span class="font-body text-[12px] text-parchment/60">Business Valuation</span>
+                  <span class="font-mono text-[11px] text-gold">78%</span>
+                </div>
+                <div class="h-[2px] bg-white/6 relative overflow-hidden">
+                  <div class="bar-fill h-full bg-gradient-to-r from-gold to-gold-light" data-pct="78" style="width:0; transition:width 1.4s 0.3s cubic-bezier(0.22,1,0.36,1)"></div>
+                </div>
+              </div>
+              <div class="bar-row">
+                <div class="flex justify-between mb-2">
+                  <span class="font-body text-[12px] text-parchment/60">Financing &amp; Structures</span>
+                  <span class="font-mono text-[11px] text-gold">71%</span>
+                </div>
+                <div class="h-[2px] bg-white/6 relative overflow-hidden">
+                  <div class="bar-fill h-full bg-gradient-to-r from-gold to-gold-light" data-pct="71" style="width:0; transition:width 1.4s 0.45s cubic-bezier(0.22,1,0.36,1)"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rule-dim my-8"></div>
+
+            <!-- Metrics row -->
+            <div class="grid grid-cols-3 gap-4">
+              <div class="text-center">
+                <div class="font-display text-2xl text-parchment">∞</div>
+                <div class="font-mono text-[9px] text-parchment/30 tracking-[0.15em] uppercase mt-1">Discretion</div>
+              </div>
+              <div class="text-center border-x border-white/6">
+                <div class="font-display text-2xl text-parchment">Tier 1</div>
+                <div class="font-mono text-[9px] text-parchment/30 tracking-[0.15em] uppercase mt-1">Network</div>
+              </div>
+              <div class="text-center">
+                <div class="font-display text-2xl text-parchment">24/7</div>
+                <div class="font-mono text-[9px] text-parchment/30 tracking-[0.15em] uppercase mt-1">Responsiveness</div>
+              </div>
+            </div>
+          </div>
+          <!-- Floating label -->
+          <div class="absolute -bottom-5 -right-5 hidden xl:block bg-gold px-5 py-3 border border-gold">
+            <div class="font-mono text-ink text-[9px] tracking-[0.22em] uppercase font-500">Independent · Advisory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SERVICES
+═══════════════════════════════════════════════════════════ -->
+<section id="services" class="bg-slate-850 py-28 lg:py-36" style="background: #0e1520;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 reveal">
+      <div>
+        <p class="eyebrow eyebrow-line mb-5">What We Do</p>
+        <h2 class="font-display text-4xl lg:text-5xl xl:text-[52px] leading-[1.1] text-parchment">
+          Advisory<br/><em class="text-gold/90">Capabilities</em>
+        </h2>
+      </div>
+      <p class="font-body text-parchment/45 max-w-md text-[15px] leading-relaxed lg:text-right">
+        From seed-stage capital strategy to NYSE-pathway structuring — we operate across the full spectrum of the corporate finance lifecycle.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/5 reveal" style="transition-delay:0.1s">
+
+      <!-- Service 1 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">01</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Raising Equity Investment</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Structuring and executing equity raises for growth-stage and established enterprises — connecting founders with institutional and strategic investors across global markets.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">02</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Business Advisory</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Strategic counsel to boards and management teams navigating competitive disruption, geographic expansion, and organisational transformation with clarity and conviction.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">03</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Business Valuation</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Rigorous, independent business valuations for M&amp;A negotiations, shareholder agreements, fund-raising rounds, and regulatory submissions — grounded in international standards.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">04</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Capital Markets</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Advisory across NYSE, NASDAQ, and other international exchanges — covering pre-listing structuring, PE ratio optimisation, share capitalisation planning, and investor relations strategy.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Service 5 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">05</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Financing Options</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Independent analysis and recommendation of optimal financing structures — debt, mezzanine, convertible instruments, and hybrid solutions — tailored to stage, sector, and jurisdiction.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Service 6 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">06</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">International Incorporations</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          End-to-end Delaware C-Corp and LLC formation — including EIN registration, share structure design, and corporate banking guidance. From $500, within one week.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PARTNERS / CLIENTELE
+     ─────────────────────────────────────────────────────────
+     ARCHITECTURE NOTE (Future-proofed):
+     This section is currently titled "Partners & Clientele."
+     When the firm's portfolio grows, rename to "Our Companies"
+     by updating:
+       1. The .eyebrow text → "Our Companies"
+       2. The <h2> heading
+       3. The .partner-card grid (already handles 2–6 col)
+     The card grid, hover states, and CTA are already structured
+     for a scalable "Our Companies" module identical in spirit
+     to ARM's implementation — without visual replication.
+═══════════════════════════════════════════════════════════ -->
+<section id="partners" class="bg-ink-900 py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="reveal mb-16">
+      <p class="eyebrow eyebrow-line mb-5">Partners &amp; Clientele</p>
+      <!-- FUTURE: change to "Our Companies" when portfolio grows -->
+      <h2 class="font-display text-4xl lg:text-5xl xl:text-[52px] leading-[1.1] text-parchment max-w-2xl">
+        The Relationships<br/>That <em class="text-gold/90">Define Us</em>
+      </h2>
+    </div>
+
+    <div class="rule-dim mb-12 reveal"></div>
+
+    <!-- Partner/Company card grid — scalable 2→6 columns -->
+    <!-- FUTURE NOTE: Replace placeholder cards with actual portfolio company cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 reveal" style="transition-delay:0.1s">
+
+      <div class="partner-card p-7 group cursor-default">
+        <div class="flex items-start justify-between mb-6">
+          <div class="w-10 h-10 border border-white/12 flex items-center justify-center">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#B8952A" stroke-width="1.3"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <span class="font-mono text-[9px] text-parchment/20 tracking-[0.22em]">MULTINATIONAL</span>
+        </div>
+        <h3 class="font-display text-lg text-parchment mb-2">Multinational Advisory</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed">
+          Serving global companies operating within the Nigerian market with intelligence, compliance frameworks, and market-entry strategy.
+        </p>
+        <div class="mt-6 font-mono text-[10px] text-gold/40 group-hover:text-gold/70 tracking-widest uppercase transition-colors">Confidential</div>
+      </div>
+
+      <div class="partner-card p-7 group cursor-default">
+        <div class="flex items-start justify-between mb-6">
+          <div class="w-10 h-10 border border-white/12 flex items-center justify-center">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#B8952A" stroke-width="1.3"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <span class="font-mono text-[9px] text-parchment/20 tracking-[0.22em]">DIASPORA</span>
+        </div>
+        <h3 class="font-display text-lg text-parchment mb-2">Diaspora-Led Enterprises</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed">
+          Supporting diaspora principals in accessing African capital markets and structuring their international holdings for scale and tax efficiency.
+        </p>
+        <div class="mt-6 font-mono text-[10px] text-gold/40 group-hover:text-gold/70 tracking-widest uppercase transition-colors">Selective Intake</div>
+      </div>
+
+      <div class="partner-card p-7 group cursor-default">
+        <div class="flex items-start justify-between mb-6">
+          <div class="w-10 h-10 border border-white/12 flex items-center justify-center">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#B8952A" stroke-width="1.3"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <span class="font-mono text-[9px] text-parchment/20 tracking-[0.22em]">GROWTH</span>
+        </div>
+        <h3 class="font-display text-lg text-parchment mb-2">Growth-Stage Founders</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed">
+          Partnering with high-potential founders on equity structuring, investor deck preparation, and Series A through pre-IPO advisory mandates.
+        </p>
+        <div class="mt-6 font-mono text-[10px] text-gold/40 group-hover:text-gold/70 tracking-widest uppercase transition-colors">Active Engagements</div>
+      </div>
+
+    </div>
+
+    <!-- CTA strip -->
+    <div class="mt-12 p-8 border border-white/6 bg-white/[0.015] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 reveal" style="transition-delay:0.15s">
+      <div>
+        <div class="font-display text-xl text-parchment mb-1">Join Our Circle of Clients</div>
+        <div class="font-body text-parchment/40 text-[13px]">Engagements are by referral and selective intake. We welcome initial conversations.</div>
+      </div>
+      <a href="#contact" class="btn-gold whitespace-nowrap flex-shrink-0">Request Introduction →</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     RESOURCES
+═══════════════════════════════════════════════════════════ -->
+<section id="resources" class="py-28 lg:py-36" style="background: #0e1520;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14 reveal">
+      <div>
+        <p class="eyebrow eyebrow-line mb-5">Our Resources</p>
+        <h2 class="font-display text-4xl lg:text-5xl xl:text-[52px] leading-[1.1] text-parchment">
+          Insight &amp;<br/><em class="text-gold/90">Intelligence</em>
+        </h2>
+      </div>
+      <a href="#contact" class="btn-ghost self-start lg:self-end">Request a Briefing →</a>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 reveal" style="transition-delay:0.1s">
+
+      <!-- Resource 1 -->
+      <a href="#" class="card-hover border border-white/7 bg-white/[0.02] p-8 flex flex-col group">
+        <div class="flex items-center justify-between mb-8">
+          <span class="resource-tag text-gold/60">Advisory Note</span>
+          <svg class="text-parchment/20 group-hover:text-gold/60 transition-colors" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment leading-snug mb-3 flex-1">
+          Structuring a Delaware C-Corp: What African Founders Must Know
+        </h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed mb-6">
+          A practical guide to incorporating in Delaware — from EIN registration and authorised share capital design to opening USD accounts and planning a NASDAQ pathway.
+        </p>
+        <div class="rule-dim mb-5"></div>
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[10px] text-parchment/25 tracking-[0.15em]">2024 · 12 min read</span>
+          <span class="font-mono text-[10px] text-gold/0 group-hover:text-gold/70 tracking-widest uppercase transition-colors">Read →</span>
+        </div>
+      </a>
+
+      <!-- Resource 2 -->
+      <a href="#" class="card-hover border border-white/7 bg-white/[0.02] p-8 flex flex-col group">
+        <div class="flex items-center justify-between mb-8">
+          <span class="resource-tag text-gold/60">Market Insight</span>
+          <svg class="text-parchment/20 group-hover:text-gold/60 transition-colors" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment leading-snug mb-3 flex-1">
+          PE Ratios, Share Capitalisation &amp; the Path to Exchange Listing
+        </h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed mb-6">
+          A rigorous breakdown of valuation mechanics — from earnings-per-share to the PE ratio thresholds required for NYSE and NASDAQ listing eligibility.
+        </p>
+        <div class="rule-dim mb-5"></div>
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[10px] text-parchment/25 tracking-[0.15em]">2024 · 18 min read</span>
+          <span class="font-mono text-[10px] text-gold/0 group-hover:text-gold/70 tracking-widest uppercase transition-colors">Read →</span>
+        </div>
+      </a>
+
+      <!-- Resource 3 -->
+      <a href="#" class="card-hover border border-white/7 bg-white/[0.02] p-8 flex flex-col group">
+        <div class="flex items-center justify-between mb-8">
+          <span class="resource-tag text-gold/60">Capital Guide</span>
+          <svg class="text-parchment/20 group-hover:text-gold/60 transition-colors" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment leading-snug mb-3 flex-1">
+          Accessing International Capital as a Nigerian Growth Company
+        </h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed mb-6">
+          How Nigerian enterprises can access offshore capital through convertible notes, mezzanine debt, and diaspora-network equity — without ceding control prematurely.
+        </p>
+        <div class="rule-dim mb-5"></div>
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[10px] text-parchment/25 tracking-[0.15em]">2024 · 15 min read</span>
+          <span class="font-mono text-[10px] text-gold/0 group-hover:text-gold/70 tracking-widest uppercase transition-colors">Read →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════════════════════ -->
+<section id="contact" class="bg-ink-900 py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <div class="reveal mb-16">
+      <p class="eyebrow eyebrow-line mb-5">Get in Touch</p>
+      <h2 class="font-display text-4xl lg:text-5xl xl:text-[52px] leading-[1.1] text-parchment max-w-2xl">
+        Begin a<br/><em class="text-gold/90">Confidential</em> Conversation
+      </h2>
+    </div>
+
+    <div class="grid lg:grid-cols-[1fr_1.4fr] gap-16 lg:gap-24">
+
+      <!-- Left: Info + QR -->
+      <div class="reveal space-y-10" style="transition-delay:0.05s">
+
+        <p class="font-body text-parchment/50 text-[15px] leading-relaxed">
+          Whether you are a multinational seeking a local advisory partner, a founder preparing for a capital raise, or an enterprise navigating a complex transaction — we invite you to begin the conversation.
+        </p>
+
+        <!-- Contact Details -->
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#B8952A" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-1">Email</div>
+              <div class="font-body text-parchment/70 text-sm"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="05606b74706c776c60764574766461736c766a777c2b666a68">[email&#160;protected]</a></div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#B8952A" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.4 2 2 0 0 1 3.6 2.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.06 6.06l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-1">Phone / WhatsApp</div>
+              <div class="font-body text-parchment/70 text-sm">08135911147</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#B8952A" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-1">Address</div>
+              <div class="font-body text-parchment/70 text-sm">1, Kilani Adebayo Close, Edu,<br/>Agbara, Ogun State, Nigeria</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#B8952A" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="13" y2="13"/></svg>
+            </div>
+            <div>
+              <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-1">RC Number</div>
+              <div class="font-body text-parchment/70 text-sm">RC: 9219184</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QR Zone -->
+        <div class="qr-zone p-6">
+          <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-5">Scan to Connect</div>
+          <div class="flex items-center gap-6">
+            <!-- QR placeholder — replace src with actual QR image when available -->
+            <div class="qr-inner flex-shrink-0">
+              <!-- To implement: <img src="your-qr-code.png" alt="QR Code" class="w-full h-full object-cover" /> -->
+              <span class="font-mono text-[8px] text-gold/30 tracking-widest relative z-10">QR</span>
+            </div>
+            <div>
+              <div class="font-display text-base text-parchment mb-1">Instant Contact</div>
+              <div class="font-body text-parchment/40 text-[12px] leading-relaxed">
+                Point your camera here to open our contact card or WhatsApp directly.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Form -->
+      <div class="reveal" style="transition-delay:0.12s">
+        <form id="enquiryForm" class="space-y-5">
+
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label class="font-mono text-[9px] text-parchment/35 tracking-[0.22em] uppercase block mb-2">Full Name *</label>
+              <input type="text" class="field" placeholder="Your full name" required />
+            </div>
+            <div>
+              <label class="font-mono text-[9px] text-parchment/35 tracking-[0.22em] uppercase block mb-2">Organisation</label>
+              <input type="text" class="field" placeholder="Company or firm" />
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label class="font-mono text-[9px] text-parchment/35 tracking-[0.22em] uppercase block mb-2">Email Address *</label>
+              <input type="email" class="field" placeholder="you@company.com" required />
+            </div>
+            <div>
+              <label class="font-mono text-[9px] text-parchment/35 tracking-[0.22em] uppercase block mb-2">Phone / WhatsApp</label>
+              <input type="tel" class="field" placeholder="+234 or +1..." />
+            </div>
+          </div>
+
+          <!-- Filter: Why are you getting in touch? -->
+          <div>
+            <label class="font-mono text-[9px] text-parchment/35 tracking-[0.22em] uppercase block mb-2">Why Are You Getting in Touch? *</label>
+            <select class="field" required>
+              <option value="" disabled selected>Select a purpose</option>
+              <option>Raising Equity Investment</option>
+              <option>Business Advisory</option>
+              <option>Business Valuation</option>
+              <option>Capital Markets Advisory</option>
+              <option>Financing Options</option>
+              <option>International Incorporation (Delaware)</option>
+              <option>Request to Speak with a Client Relations Official</option>
+              <option>Leave an Enquiry</option>
+              <option>General Information</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="font-mono text-[9px] text-parchment/35 tracking-[0.22em] uppercase block mb-2">Your Enquiry</label>
+            <textarea class="field" rows="4" placeholder="Briefly describe your situation or objective..."></textarea>
+          </div>
+
+          <!-- Leave contact details -->
+          <div>
+            <label class="font-mono text-[9px] text-parchment/35 tracking-[0.22em] uppercase block mb-2">Preferred Contact Method (optional)</label>
+            <input type="text" class="field" placeholder="e.g. WhatsApp, email, phone call..." />
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 pt-2">
+            <button type="submit" class="btn-gold">Submit Enquiry →</button>
+            <p class="font-body text-parchment/25 text-[12px] leading-snug max-w-xs">
+              All enquiries are treated with absolute discretion. A client relations official will respond within two business days.
+            </p>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer style="background:#090d14; border-top: 1px solid rgba(255,255,255,0.06);">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 py-16 lg:py-20">
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-14">
+
+      <!-- Brand -->
+      <div class="sm:col-span-2 lg:col-span-1">
+        <a href="#" class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 border border-gold/40 flex items-center justify-center">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9 1L17 5.5V12.5L9 17L1 12.5V5.5L9 1Z" stroke="#B8952A" stroke-width="1" fill="none"/>
+              <circle cx="9" cy="9" r="2.5" fill="#B8952A" opacity="0.7"/>
+            </svg>
+          </div>
+          <div>
+            <div class="font-display text-[13px] text-parchment leading-tight">Quests &amp; Solutions</div>
+            <div class="font-mono text-[9px] text-gold/60 tracking-[0.18em] uppercase">Advisory Limited</div>
+          </div>
+        </a>
+        <p class="font-body text-parchment/35 text-[13px] leading-relaxed mb-6">
+          Independent advisory. Rigorous counsel. Delivered with discretion to enterprises navigating complex capital and strategic decisions.
+        </p>
+        <div class="font-mono text-[9px] text-parchment/20 tracking-[0.15em] uppercase">1, Kilani Adebayo Close, Edu, Agbara, Ogun State · RC: 9219184</div>
+      </div>
+
+      <!-- Services -->
+      <div>
+        <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-5">Services</div>
+        <ul class="space-y-3">
+          <li><a href="#services" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Equity Investment</a></li>
+          <li><a href="#services" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Business Advisory</a></li>
+          <li><a href="#services" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Business Valuation</a></li>
+          <li><a href="#services" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Capital Markets</a></li>
+          <li><a href="#services" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Financing Options</a></li>
+          <li><a href="#services" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Incorporations</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-5">Company</div>
+        <ul class="space-y-3">
+          <li><a href="#about"     class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">About Us</a></li>
+          <li><a href="#partners"  class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Partners &amp; Clientele</a></li>
+          <li><a href="#resources" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Resources</a></li>
+          <li><a href="#contact"   class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Connect -->
+      <div>
+        <div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-5">Connect</div>
+        <ul class="space-y-3">
+          <li><a href="#contact" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Leave an Enquiry</a></li>
+          <li><a href="#contact" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Speak with Client Relations</a></li>
+          <li><a href="javascript:void(0)" onclick="document.getElementById('chatPanel').classList.toggle('open')" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">Live Chat</a></li>
+          <li><a href="#contact" class="font-body text-parchment/40 text-[13px] hover:text-gold/80 transition-colors">QR Contact Card</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="rule-dim mb-8"></div>
+
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="font-body text-parchment/20 text-[12px] leading-relaxed">
+        © 2025 Quests &amp; Solutions Advisory Limited. All rights reserved.<br class="sm:hidden"/>
+        <span class="hidden sm:inline"> · </span>Not licensed to accept deposits from individuals or businesses.
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="#" class="font-mono text-[9px] text-parchment/25 tracking-[0.15em] uppercase hover:text-gold/60 transition-colors">Privacy Policy</a>
+        <span class="text-parchment/10">|</span>
+        <a href="#" class="font-mono text-[9px] text-parchment/25 tracking-[0.15em] uppercase hover:text-gold/60 transition-colors">Terms of Engagement</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     LIVE CHAT WIDGET
+═══════════════════════════════════════════════════════════ -->
+<div class="chat-widget">
+  <!-- Panel -->
+  <div class="chat-panel" id="chatPanel">
+    <div style="padding:16px 18px; border-bottom:1px solid rgba(184,149,42,0.15); background:#111827; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="w-7 h-7 border border-gold/40 flex items-center justify-center" style="width:28px;height:28px;">
+          <svg width="12" height="12" viewBox="0 0 18 18" fill="none"><path d="M9 1L17 5.5V12.5L9 17L1 12.5V5.5L9 1Z" stroke="#B8952A" stroke-width="1" fill="none"/><circle cx="9" cy="9" r="2.5" fill="#B8952A" opacity="0.7"/></svg>
+        </div>
+        <div>
+          <div class="font-body text-parchment text-[12px] font-600">Client Relations</div>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:6px;height:6px;background:#22c55e;border-radius:50%;"></div>
+            <span class="font-mono text-[9px] text-parchment/40 tracking-widest uppercase">Online</span>
+          </div>
+        </div>
+      </div>
+      <button onclick="document.getElementById('chatPanel').classList.remove('open')" style="background:none;border:none;color:rgba(240,234,214,0.4);cursor:pointer;font-size:16px;line-height:1;transition:color 0.2s;" onmouseover="this.style.color='#B8952A'" onmouseout="this.style.color='rgba(240,234,214,0.4)'">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMsgs">
+      <div class="msg-firm">Good day. Welcome to Quests &amp; Solutions Advisory Limited. How may we assist you today?</div>
+      <div class="msg-firm">Please share your enquiry, or leave your contact details and a client relations official will be in touch within two business days.</div>
+    </div>
+    <div style="padding:12px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:8px;">
+      <input type="text" id="chatIn" class="field" style="flex:1;padding:10px 12px;font-size:0.78rem;" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()" />
+      <button onclick="sendChat()" style="width:38px;height:38px;background:#B8952A;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s;" onmouseover="this.style.background='#D4AF50'" onmouseout="this.style.background='#B8952A'">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#0D1117" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+  <!-- Toggle button -->
+  <button class="chat-btn" onclick="document.getElementById('chatPanel').classList.toggle('open')" aria-label="Live Chat">
+    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#0D1117" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <div class="chat-status"></div>
+  </button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#B8952A" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Enquiry submitted. A client relations official will be in touch.</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════════ -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── NAV SCROLL ──────────────────────────────────────────────
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// ── MOBILE NAV ──────────────────────────────────────────────
+const menuToggle = document.getElementById('menuToggle');
+const mobileNav  = document.getElementById('mobileNav');
+const bar1 = document.getElementById('bar1');
+const bar2 = document.getElementById('bar2');
+const bar3 = document.getElementById('bar3');
+let navOpen = false;
+
+menuToggle.addEventListener('click', () => {
+  navOpen = !navOpen;
+  mobileNav.classList.toggle('open', navOpen);
+  if (navOpen) {
+    bar1.style.transform = 'rotate(45deg) translate(4.5px, 4.5px)';
+    bar2.style.opacity = '0';
+    bar3.style.transform = 'rotate(-45deg) translate(4.5px, -4.5px)';
+  } else {
+    bar1.style.transform = bar3.style.transform = '';
+    bar2.style.opacity = '';
+  }
+});
+
+function closeMobileNav() {
+  navOpen = false;
+  mobileNav.classList.remove('open');
+  bar1.style.transform = bar3.style.transform = '';
+  bar2.style.opacity = '';
+}
+
+// ── SCROLL REVEAL ────────────────────────────────────────────
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+
+// ── BAR CHART REVEAL ──────────────────────────────────────────
+const barFills = document.querySelectorAll('.bar-fill');
+const barObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      barFills.forEach(b => { b.style.width = b.dataset.pct + '%'; });
+      barObs.disconnect();
+    }
+  });
+}, { threshold: 0.4 });
+const barChart = document.getElementById('barChart');
+if (barChart) barObs.observe(barChart);
+
+// ── SMOOTH SCROLL ────────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) {
+      e.preventDefault();
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// ── FORM SUBMIT ───────────────────────────────────────────────
+document.getElementById('enquiryForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  e.target.reset();
+  setTimeout(() => toast.classList.remove('show'), 4500);
+});
+
+// ── LIVE CHAT ─────────────────────────────────────────────────
+function sendChat() {
+  const inp = document.getElementById('chatIn');
+  const val = inp.value.trim();
+  if (!val) return;
+  const msgs = document.getElementById('chatMsgs');
+  const userBubble = document.createElement('div');
+  userBubble.className = 'msg-user';
+  userBubble.textContent = val;
+  msgs.appendChild(userBubble);
+  inp.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+  setTimeout(() => {
+    const reply = document.createElement('div');
+    reply.className = 'msg-firm';
+    reply.textContent = 'Thank you. A member of our client relations team will follow up with you shortly. You may also use the enquiry form above.';
+    msgs.appendChild(reply);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1400);
+}
+</script>
+</body>
+</html>

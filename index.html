@@ -155,6 +155,10 @@
     }
     .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: #B8952A; animation: pulse-dot 2s ease infinite; }
 
+    /* ─── MARKET TICKER ───────────────────────────────────── */
+    .ticker-change.tick-up   { color: #4ade80; }
+    .ticker-change.tick-down { color: #f87171; }
+
     /* ─── SCROLL REVEAL ───────────────────────────────────── */
     .reveal {
       opacity: 0;
@@ -438,7 +442,40 @@
 <!-- ═══════════════════════════════════════════════════════════
      HERO
 ═══════════════════════════════════════════════════════════ -->
-<section class="hero-grid hero-radial min-h-screen flex flex-col justify-center relative overflow-hidden pt-[70px]">
+<section class="hero-grid hero-radial min-h-screen flex flex-col justify-center relative overflow-hidden">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LIVE MARKET TICKER — Dow Jones / S&P 500 / Nasdaq
+       Sits directly under the fixed nav (70px offset lives here now).
+       Wire-up + config lives in the SCRIPTS block near the end of
+       this file (search "MARKET_CONFIG"). Add a free Twelve Data
+       API key there to switch this from indicative to fully live.
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="marketTicker" class="w-full border-b border-white/6" style="margin-top:70px; background:rgba(13,17,23,0.55);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-3 flex flex-wrap items-center gap-x-8 gap-y-2">
+      <span class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase flex items-center gap-2 flex-shrink-0">
+        <span class="pill-dot" style="width:5px;height:5px;"></span>Markets
+      </span>
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-2">
+        <div class="flex items-baseline gap-2" data-ticker="DJI">
+          <span class="font-mono text-[10px] text-parchment/40 tracking-widest uppercase">Dow Jones</span>
+          <span class="font-mono text-[12px] text-parchment/80 ticker-price">—</span>
+          <span class="font-mono text-[10px] ticker-change text-parchment/30">—</span>
+        </div>
+        <div class="flex items-baseline gap-2" data-ticker="SPX">
+          <span class="font-mono text-[10px] text-parchment/40 tracking-widest uppercase">S&amp;P 500</span>
+          <span class="font-mono text-[12px] text-parchment/80 ticker-price">—</span>
+          <span class="font-mono text-[10px] ticker-change text-parchment/30">—</span>
+        </div>
+        <div class="flex items-baseline gap-2" data-ticker="IXIC">
+          <span class="font-mono text-[10px] text-parchment/40 tracking-widest uppercase">Nasdaq</span>
+          <span class="font-mono text-[12px] text-parchment/80 ticker-price">—</span>
+          <span class="font-mono text-[10px] ticker-change text-parchment/30">—</span>
+        </div>
+      </div>
+      <span id="tickerStatus" class="font-mono text-[8px] text-parchment/20 tracking-widest uppercase ml-auto flex-shrink-0">Indicative · connecting…</span>
+    </div>
+  </div>
 
   <!-- Vertical label left -->
   <div class="hidden xl:flex absolute left-8 top-1/2 -translate-y-1/2 items-center gap-3" style="writing-mode:vertical-rl; transform: rotate(180deg) translateY(50%);">
@@ -479,25 +516,27 @@
       </div>
 
       <!-- Stats strip -->
+      <!-- Figures below are pulled from SITE_CONFIG.stats at the bottom of this file —
+           edit the numbers there once and every span here updates itself on load. -->
       <div class="anim-fade-up delay-400 rule-dim mb-12"></div>
       <div class="hero-stat-row anim-fade-up delay-500 flex items-start gap-10 lg:gap-16 flex-wrap">
         <div>
-          <div class="stat-num">20<span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
+          <div class="stat-num"><span id="statYears">20</span><span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
           <div class="font-mono text-[10px] text-parchment/35 tracking-[0.16em] uppercase mt-2">Years Combined<br/>Leadership</div>
         </div>
         <div class="w-px h-12 bg-white/8 self-start mt-2"></div>
         <div>
-          <div class="stat-num">$<span id="c2">200</span>M<span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
+          <div class="stat-num">$<span id="statCapital">200</span>M<span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
           <div class="font-mono text-[10px] text-parchment/35 tracking-[0.16em] uppercase mt-2">Advisory &amp;<br/>Capital Value</div>
         </div>
         <div class="w-px h-12 bg-white/8 self-start mt-2"></div>
         <div>
-          <div class="stat-num"><span id="c3">14</span><span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
+          <div class="stat-num"><span id="statMarkets">14</span><span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
           <div class="font-mono text-[10px] text-parchment/35 tracking-[0.16em] uppercase mt-2">International<br/>Markets</div>
         </div>
         <div class="w-px h-12 bg-white/8 self-start mt-2"></div>
         <div>
-          <div class="stat-num"><span id="c4">60</span><span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
+          <div class="stat-num"><span id="statMandates">60</span><span class="text-gold" style="font-size:0.55em; vertical-align:top; margin-top:0.3em; display:inline-block">+</span></div>
           <div class="font-mono text-[10px] text-parchment/35 tracking-[0.16em] uppercase mt-2">Mandates<br/>Delivered</div>
         </div>
       </div>
@@ -672,8 +711,81 @@
         </h2>
       </div>
       <p class="font-body text-parchment/45 max-w-md text-[15px] leading-relaxed lg:text-right">
-        From seed-stage capital strategy to NYSE-pathway structuring — we operate across the full spectrum of the corporate finance lifecycle.
+        From financial strategy to economic research, technology advisory, and leadership development — we operate across the full breadth of what growing enterprises and founders need.
       </p>
+    </div>
+
+    <!-- Four core practice pillars -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/5 reveal mb-16">
+
+      <!-- Pillar 1 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">01</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Financial Advisory</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Market analysis and forecasting, investment strategy development, and corporate finance consulting — grounded in years of hands-on financial analysis.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">02</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Economic Insights</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Tailored research on Nigerian and African markets, policy and regulatory impact assessments, and strategic recommendations for sustainable growth.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">03</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Technology Advisory</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Digital transformation roadmaps, IT strategy and infrastructure consulting, and cybersecurity awareness — bridging finance and technology for resilient operations.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Pillar 4 -->
+      <div class="card-hover bg-ink-900 border border-transparent p-9 flex flex-col group" style="background:#0D1117">
+        <div class="flex items-start justify-between mb-8">
+          <span class="font-mono text-[10px] text-parchment/20 tracking-widest2">04</span>
+          <svg class="text-gold opacity-60 group-hover:opacity-100 transition-opacity" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-parchment mb-3 leading-snug">Leadership Development</h3>
+        <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
+          Executive coaching and advisory, team resilience, and organisational growth strategies for founders and management teams building for the long term.
+        </p>
+        <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
+          <span>Enquire</span><span class="partner-arrow">→</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Specialist financial services (detailed offerings under the Financial Advisory pillar) -->
+    <div class="flex items-end justify-between gap-8 mb-10 reveal">
+      <div>
+        <p class="eyebrow eyebrow-line mb-4">Within Financial Advisory</p>
+        <h3 class="font-display text-2xl lg:text-3xl leading-[1.1] text-parchment">Specialist Capabilities</h3>
+      </div>
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/5 reveal" style="transition-delay:0.1s">
@@ -761,7 +873,7 @@
         </div>
         <h3 class="font-display text-xl text-parchment mb-3 leading-snug">International Incorporations</h3>
         <p class="font-body text-parchment/40 text-[13px] leading-relaxed flex-1">
-          End-to-end Delaware C-Corp and LLC formation — including EIN registration, share structure design, and corporate banking guidance. From $500, within one week.
+          End-to-end Delaware entity formation — advising on the structure best suited to your goals, from LLCs to corporations — including EIN registration, share design, and corporate banking guidance. From $500, within one week.
         </p>
         <div class="mt-7 flex items-center gap-2 text-gold/0 group-hover:text-gold/80 transition-all duration-300 text-[11px] font-mono tracking-widest uppercase">
           <span>Enquire</span><span class="partner-arrow">→</span>
@@ -886,10 +998,10 @@
           <svg class="text-parchment/20 group-hover:text-gold/60 transition-colors" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
         </div>
         <h3 class="font-display text-xl text-parchment leading-snug mb-3 flex-1">
-          Structuring a Delaware C-Corp: What African Founders Must Know
+          Structuring a Delaware Entity: What African Founders Must Know
         </h3>
         <p class="font-body text-parchment/40 text-[13px] leading-relaxed mb-6">
-          A practical guide to incorporating in Delaware — from EIN registration and authorised share capital design to opening USD accounts and planning a NASDAQ pathway.
+          A practical guide to incorporating in Delaware — choosing the right entity type for your goals, EIN registration, authorised share capital design, opening USD accounts, and planning a NASDAQ pathway.
         </p>
         <div class="rule-dim mb-5"></div>
         <div class="flex items-center justify-between">
@@ -1225,6 +1337,88 @@
      SCRIPTS
 ═══════════════════════════════════════════════════════════ -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ══════════════════════════════════════════════════════════════
+// SITE_CONFIG — internal, editable figures
+// Change a number here and it updates everywhere it's displayed.
+// Nothing else in the file needs to be touched to adjust a stat.
+// ══════════════════════════════════════════════════════════════
+const SITE_CONFIG = {
+  stats: {
+    yearsLeadership:   20,   // "Years Combined Leadership"
+    capitalValueM:     200,  // "$__M+ Advisory & Capital Value"
+    marketsCount:      14,   // "International Markets"
+    mandatesDelivered: 60    // "Mandates Delivered"
+  }
+};
+
+Object.entries({
+  statYears:    SITE_CONFIG.stats.yearsLeadership,
+  statCapital:  SITE_CONFIG.stats.capitalValueM,
+  statMarkets:  SITE_CONFIG.stats.marketsCount,
+  statMandates: SITE_CONFIG.stats.mandatesDelivered
+}).forEach(([id, value]) => {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+});
+
+// ══════════════════════════════════════════════════════════════
+// MARKET_CONFIG — live index ticker (Dow Jones / S&P 500 / Nasdaq)
+// A genuinely real-time feed requires a market-data provider —
+// there is no free, keyless, CORS-enabled source for these indices.
+// Twelve Data has a free tier (no card required) that works
+// directly from the browser: https://twelvedata.com/pricing
+// Paste the key below and the ticker goes live immediately.
+// Until a key is added, the strip shows a clear "connecting /
+// unavailable" state rather than fabricated numbers.
+// ══════════════════════════════════════════════════════════════
+const MARKET_CONFIG = {
+  apiKey: '',           // ← paste your free Twelve Data API key here
+  refreshMs: 60000,     // refresh every 60s (free tier: 8 req/min)
+  symbols: {
+    DJI:  'DJI',
+    SPX:  'SPX',
+    IXIC: 'IXIC'
+  }
+};
+
+async function refreshMarketTicker() {
+  const status = document.getElementById('tickerStatus');
+  if (!MARKET_CONFIG.apiKey) {
+    if (status) status.textContent = 'Indicative · add API key for live data';
+    return;
+  }
+  try {
+    const symbolList = Object.values(MARKET_CONFIG.symbols).join(',');
+    const res = await fetch(`https://api.twelvedata.com/quote?symbol=${encodeURIComponent(symbolList)}&apikey=${MARKET_CONFIG.apiKey}`);
+    const data = await res.json();
+
+    Object.entries(MARKET_CONFIG.symbols).forEach(([key, symbol]) => {
+      const quote = Object.keys(MARKET_CONFIG.symbols).length > 1 ? data[symbol] : data;
+      if (!quote || !quote.close) return;
+      const row = document.querySelector(`[data-ticker="${key}"]`);
+      if (!row) return;
+      const price  = parseFloat(quote.close);
+      const change = parseFloat(quote.percent_change);
+      const priceEl  = row.querySelector('.ticker-price');
+      const changeEl = row.querySelector('.ticker-change');
+      if (priceEl)  priceEl.textContent = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      if (changeEl) {
+        const up = change >= 0;
+        changeEl.textContent = `${up ? '▲' : '▼'} ${Math.abs(change).toFixed(2)}%`;
+        changeEl.classList.remove('tick-up', 'tick-down', 'text-parchment/30');
+        changeEl.classList.add(up ? 'tick-up' : 'tick-down');
+      }
+    });
+
+    if (status) status.textContent = `Live · updated ${new Date().toLocaleTimeString()}`;
+  } catch (err) {
+    if (status) status.textContent = 'Market data unavailable';
+  }
+}
+
+refreshMarketTicker();
+setInterval(refreshMarketTicker, MARKET_CONFIG.refreshMs);
+
 // ── NAV SCROLL ──────────────────────────────────────────────
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {

@@ -176,6 +176,36 @@
     .ticker-change.tick-up   { color: #4ade80; }
     .ticker-change.tick-down { color: #f87171; }
 
+    /* The reel: one continuous lane of instruments. The track holds two
+       identical halves and slides exactly -50%, so the loop is seamless.
+       Duration is set per-render from the measured width (see buildReel)
+       so the scroll speed stays constant no matter how many instruments
+       the Worker returns. */
+    .ticker-reel {
+      flex: 1 1 0%;
+      min-width: 0;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 36px, #000 calc(100% - 36px), transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 36px, #000 calc(100% - 36px), transparent);
+    }
+    .ticker-track {
+      display: flex;
+      align-items: baseline;
+      width: max-content;
+      animation: reel var(--reel-duration, 90s) linear infinite;
+    }
+    .ticker-reel:hover .ticker-track { animation-play-state: paused; }
+    @keyframes reel { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .ticker-item { display: flex; align-items: baseline; gap: 8px; padding: 0 18px; white-space: nowrap; }
+    .ticker-sep  { color: rgba(184,149,42,0.28); font-size: 8px; align-self: center; }
+
+    /* Motion-sensitive visitors get a static, hand-scrollable lane. */
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      .ticker-reel  { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+    }
+
     /* ─── SCROLL REVEAL ───────────────────────────────────── */
     .reveal {
       opacity: 0;
@@ -462,45 +492,25 @@
 <section class="hero-grid hero-radial min-h-screen flex flex-col justify-center relative overflow-hidden">
 
   <!-- ═══════════════════════════════════════════════════════════
-       LIVE MARKET TICKER — Dow Jones / S&P 500 / Nasdaq
+       LIVE MARKET REEL — global indices + major FX pairs
        Sits directly under the fixed nav (70px offset lives here now).
-       Wire-up + config lives in the SCRIPTS block near the end of
-       this file (search "MARKET_CONFIG"). Add a free Twelve Data
-       API key there to switch this from indicative to fully live.
+       The lane below is built by JS from MARKET_INSTRUMENTS in the
+       SCRIPTS block near the end of this file — edit that list to add,
+       remove, or reorder instruments. Data comes from the Cloudflare
+       Worker in worker.js (search "MARKET_CONFIG" for the endpoint).
   ═══════════════════════════════════════════════════════════ -->
   <div id="marketTicker" class="w-full border-b border-white/6" style="margin-top:70px; background:rgba(13,17,23,0.55);">
-    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-3 flex flex-wrap items-center gap-x-8 gap-y-2">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-3 flex items-center gap-4 lg:gap-6">
       <span class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase flex items-center gap-2 flex-shrink-0">
         <span class="pill-dot" style="width:5px;height:5px;"></span>Markets
       </span>
-      <div class="flex flex-wrap items-center gap-x-8 gap-y-2">
-        <div class="flex items-baseline gap-2" data-ticker="NGXASI">
-          <span class="font-mono text-[10px] text-parchment/40 tracking-widest uppercase">NGX ASI</span>
-          <span class="font-mono text-[12px] text-parchment/80 ticker-price">—</span>
-          <span class="font-mono text-[10px] ticker-change text-parchment/30">—</span>
-        </div>
-        <div class="flex items-baseline gap-2" data-ticker="USDNGN">
-          <span class="font-mono text-[10px] text-parchment/40 tracking-widest uppercase">USD/NGN</span>
-          <span class="font-mono text-[12px] text-parchment/80 ticker-price">—</span>
-          <span class="font-mono text-[10px] ticker-change text-parchment/30">—</span>
-        </div>
-        <div class="flex items-baseline gap-2" data-ticker="DJI">
-          <span class="font-mono text-[10px] text-parchment/40 tracking-widest uppercase">Dow Jones</span>
-          <span class="font-mono text-[12px] text-parchment/80 ticker-price">—</span>
-          <span class="font-mono text-[10px] ticker-change text-parchment/30">—</span>
-        </div>
-        <div class="flex items-baseline gap-2" data-ticker="SPX">
-          <span class="font-mono text-[10px] text-parchment/40 tracking-widest uppercase">S&amp;P 500</span>
-          <span class="font-mono text-[12px] text-parchment/80 ticker-price">—</span>
-          <span class="font-mono text-[10px] ticker-change text-parchment/30">—</span>
-        </div>
-        <div class="flex items-baseline gap-2" data-ticker="IXIC">
-          <span class="font-mono text-[10px] text-parchment/40 tracking-widest uppercase">Nasdaq</span>
-          <span class="font-mono text-[12px] text-parchment/80 ticker-price">—</span>
-          <span class="font-mono text-[10px] ticker-change text-parchment/30">—</span>
-        </div>
+
+      <!-- Reel lane — populated on load, and again on every refresh. -->
+      <div class="ticker-reel" aria-hidden="true">
+        <div class="ticker-track" id="tickerTrack"></div>
       </div>
-      <span id="tickerStatus" class="font-mono text-[8px] text-parchment/20 tracking-widest uppercase ml-auto flex-shrink-0">Indicative · delayed</span>
+
+      <span id="tickerStatus" class="hidden md:block font-mono text-[8px] text-parchment/20 tracking-widest uppercase flex-shrink-0">Indicative · delayed</span>
     </div>
   </div>
 
@@ -1080,6 +1090,32 @@
 
 
 <!-- ═══════════════════════════════════════════════════════════
+     MARKET CENTRES — local time across the exchanges we track
+     ─────────────────────────────────────────────────────────
+     Cities live in WORLD_CLOCKS in the SCRIPTS block at the end
+     of this file. Times are derived from the visitor's own device
+     clock via Intl, so daylight saving is handled automatically
+     and there is nothing to maintain seasonally.
+═══════════════════════════════════════════════════════════ -->
+<section id="market-centres" class="border-y border-white/6" style="background:#0b111a;">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 py-10 lg:py-12">
+    <div class="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-14">
+
+      <div class="flex-shrink-0 lg:w-48">
+        <p class="eyebrow mb-2">Market Centres</p>
+        <p class="font-body text-parchment/35 text-[13px] leading-relaxed">Local time across the exchanges we follow.</p>
+      </div>
+
+      <div id="worldClocks" class="flex-1 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-x-6 gap-y-7">
+        <!-- Populated by renderWorldClocks() -->
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
      CONTACT
 ═══════════════════════════════════════════════════════════ -->
 <section id="contact" class="bg-ink-900 py-28 lg:py-36">
@@ -1388,21 +1424,107 @@ Object.entries({
 });
 
 // ══════════════════════════════════════════════════════════════
-// MARKET_CONFIG — indicative index ticker
+// MARKET_CONFIG — indicative markets reel
 // Data is fetched by a separate Cloudflare Worker (see worker.js),
 // which caches upstream results for 5 minutes and serves JSON.
 // Paste the Worker's URL below. Until it is set — or if it fails —
-// the strip shows dashes rather than fabricated numbers.
+// the strip stays empty rather than showing fabricated numbers.
 // Figures are indicative and delayed, and labelled as such.
 // ══════════════════════════════════════════════════════════════
 const MARKET_CONFIG = {
   endpoint: 'https://qs-markets.iamisaacpeace.workers.dev/',        // ← paste your Worker URL, e.g. https://qs-markets.<subdomain>.workers.dev
-  refreshMs: 300000    // re-poll every 5 min; the Worker caches for the same period
+  refreshMs: 300000,   // re-poll every 5 min; the Worker caches for the same period
+  pixelsPerSecond: 55  // reel speed; duration is derived from the measured track width
 };
+
+// Display order for the reel: home market first, then the global indices
+// by weight, then the most-transacted FX pairs. Keys must match the ones
+// the Worker returns — anything it can't source is simply skipped, so an
+// unavailable feed reads as a shorter reel rather than a broken one.
+const MARKET_INSTRUMENTS = [
+  { key: 'NGXASI',  label: 'NGX ASI' },
+  { key: 'DJI',     label: 'Dow Jones' },
+  { key: 'SPX',     label: 'S&P 500' },
+  { key: 'IXIC',    label: 'Nasdaq' },
+  { key: 'FTSE',    label: 'FTSE 100' },
+  { key: 'N225',    label: 'Nikkei 225' },
+  { key: 'GDAXI',   label: 'DAX' },
+  { key: 'SSEC',    label: 'Shanghai Composite' },
+  { key: 'N100',    label: 'Euronext 100' },
+  { key: 'HSI',     label: 'Hang Seng' },
+  { key: 'FCHI',    label: 'CAC 40' },
+  { key: 'USDNGN',  label: 'USD/NGN' },
+  { key: 'EURUSD',  label: 'EUR/USD' },
+  { key: 'USDJPY',  label: 'USD/JPY' },
+  { key: 'GBPUSD',  label: 'GBP/USD' },
+  { key: 'USDCNY',  label: 'USD/CNY' },
+  { key: 'USDCAD',  label: 'USD/CAD' },
+  { key: 'AUDUSD',  label: 'AUD/USD' },
+  { key: 'USDCHF',  label: 'USD/CHF' },
+  { key: 'EURJPY',  label: 'EUR/JPY' },
+  { key: 'GBPJPY',  label: 'GBP/JPY' },
+  { key: 'EURGBP',  label: 'EUR/GBP' }
+];
 
 function setTickerStatus(text) {
   const el = document.getElementById('tickerStatus');
   if (el) el.textContent = text;
+}
+
+// FX crosses trade in four decimals; index levels read better in two.
+function formatQuotePrice(price) {
+  const dp = Math.abs(price) < 10 ? 4 : 2;
+  return price.toLocaleString(undefined, { minimumFractionDigits: dp, maximumFractionDigits: dp });
+}
+
+function buildTickerItem(label, quote) {
+  const item = document.createElement('span');
+  item.className = 'ticker-item';
+
+  const name = document.createElement('span');
+  name.className = 'font-mono text-[10px] text-parchment/40 tracking-widest uppercase';
+  name.textContent = label;
+
+  const price = document.createElement('span');
+  price.className = 'font-mono text-[12px] text-parchment/80';
+  price.textContent = formatQuotePrice(quote.price);
+
+  const up = quote.changePct >= 0;
+  const change = document.createElement('span');
+  change.className = `font-mono text-[10px] ticker-change ${up ? 'tick-up' : 'tick-down'}`;
+  change.textContent = `${up ? '▲' : '▼'} ${Math.abs(quote.changePct).toFixed(2)}%`;
+
+  item.append(name, price, change);
+  return item;
+}
+
+// Renders the lane twice over so the -50% slide loops seamlessly, then
+// sets the duration from the measured half-width to hold a constant speed.
+function buildReel(quotes) {
+  const track = document.getElementById('tickerTrack');
+  if (!track) return;
+
+  const live = MARKET_INSTRUMENTS
+    .map(inst => ({ inst, quote: quotes[inst.key] }))
+    .filter(({ quote }) => quote && quote.ok && typeof quote.price === 'number');
+
+  track.textContent = '';
+  if (!live.length) return;
+
+  const half = document.createDocumentFragment();
+  live.forEach(({ inst, quote }) => {
+    half.appendChild(buildTickerItem(inst.label, quote));
+    const sep = document.createElement('span');
+    sep.className = 'ticker-sep';
+    sep.textContent = '◆';
+    half.appendChild(sep);
+  });
+
+  track.appendChild(half.cloneNode(true));
+  track.appendChild(half);
+
+  const halfWidth = track.scrollWidth / 2;
+  track.style.setProperty('--reel-duration', `${Math.max(30, halfWidth / MARKET_CONFIG.pixelsPerSecond)}s`);
 }
 
 async function refreshMarketTicker() {
@@ -1412,28 +1534,7 @@ async function refreshMarketTicker() {
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
 
-    const quotes = data.quotes || {};
-
-    // Hide any row the Worker didn't return or couldn't source. A missing
-    // instrument reads as deliberate; a permanent dash reads as broken.
-    document.querySelectorAll('[data-ticker]').forEach(row => {
-      const q = quotes[row.dataset.ticker];
-      row.style.display = (q && q.ok && q.price !== null) ? '' : 'none';
-    });
-
-    Object.entries(quotes).forEach(([key, q]) => {
-      const row = document.querySelector(`[data-ticker="${key}"]`);
-      if (!row || !q || !q.ok || q.price === null) return;
-      const priceEl  = row.querySelector('.ticker-price');
-      const changeEl = row.querySelector('.ticker-change');
-      if (priceEl) priceEl.textContent = q.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      if (changeEl) {
-        const up = q.changePct >= 0;
-        changeEl.textContent = `${up ? '▲' : '▼'} ${Math.abs(q.changePct).toFixed(2)}%`;
-        changeEl.classList.remove('tick-up','tick-down','text-parchment/30');
-        changeEl.classList.add(up ? 'tick-up' : 'tick-down');
-      }
-    });
+    buildReel(data.quotes || {});
 
     const t = data.updated ? new Date(data.updated) : new Date();
     const src = (data.sources && data.sources.length) ? ` · ${data.sources.join(', ')}` : '';
@@ -1445,6 +1546,68 @@ async function refreshMarketTicker() {
 
 refreshMarketTicker();
 setInterval(refreshMarketTicker, MARKET_CONFIG.refreshMs);
+
+// ══════════════════════════════════════════════════════════════
+// WORLD_CLOCKS — local time in the market centres we track
+// Times come from the visitor's own device clock, reformatted per
+// zone by Intl, so nothing here needs seasonal maintenance: daylight
+// saving and the UTC offsets below both follow the IANA database.
+// Add or remove a city by editing this one list.
+// ══════════════════════════════════════════════════════════════
+const WORLD_CLOCKS = [
+  { city: 'Lagos',    zone: 'Africa/Lagos' },
+  { city: 'London',   zone: 'Europe/London' },
+  { city: 'New York', zone: 'America/New_York' },
+  { city: 'Mumbai',   zone: 'Asia/Kolkata' },
+  { city: 'Shanghai', zone: 'Asia/Shanghai' },
+  { city: 'Seoul',    zone: 'Asia/Seoul' },
+  { city: 'Tokyo',    zone: 'Asia/Tokyo' }
+];
+
+// "GMT+9" / "GMT+5:30" — trimmed of the redundant minutes on whole offsets.
+function zoneOffsetLabel(zone, now) {
+  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: zone, timeZoneName: 'shortOffset' }).formatToParts(now);
+  const raw = parts.find(part => part.type === 'timeZoneName')?.value || '';
+  return raw.replace(/^GMT$/, 'GMT+0').replace(':00', '');
+}
+
+// Weekday is shown because these centres straddle the date line from
+// Lagos — Tokyo is routinely a day ahead, and a bare time hides that.
+function renderWorldClocks() {
+  const grid = document.getElementById('worldClocks');
+  if (!grid) return;
+
+  const now = new Date();
+
+  WORLD_CLOCKS.forEach((entry, i) => {
+    let cell = grid.children[i];
+    if (!cell) {
+      cell = document.createElement('div');
+      cell.innerHTML =
+        '<div class="font-mono text-[9px] text-gold/50 tracking-[0.22em] uppercase mb-2 clock-city"></div>' +
+        '<div class="font-display text-[26px] lg:text-[30px] text-parchment/85 leading-none tabular-nums clock-time"></div>' +
+        '<div class="font-mono text-[9px] text-parchment/25 tracking-[0.15em] uppercase mt-2 clock-meta"></div>';
+      cell.querySelector('.clock-city').textContent = entry.city;
+      grid.appendChild(cell);
+    }
+
+    const time = new Intl.DateTimeFormat('en-GB', {
+      timeZone: entry.zone, hour: '2-digit', minute: '2-digit', hour12: false
+    }).format(now);
+    const day = new Intl.DateTimeFormat('en-GB', { timeZone: entry.zone, weekday: 'short' }).format(now);
+
+    cell.querySelector('.clock-time').textContent = time;
+    cell.querySelector('.clock-meta').textContent = `${day} · ${zoneOffsetLabel(entry.zone, now)}`;
+  });
+}
+
+renderWorldClocks();
+// Realign to the top of the next minute, then tick once a minute — the
+// clocks show no seconds, so anything faster is wasted work.
+setTimeout(() => {
+  renderWorldClocks();
+  setInterval(renderWorldClocks, 60000);
+}, (60 - new Date().getSeconds()) * 1000);
 
 // ── NAV SCROLL ──────────────────────────────────────────────
 const navbar = document.getElementById('navbar');
